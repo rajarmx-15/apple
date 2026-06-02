@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>iOS Web Simulator - Video Edition</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            background: url('https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1964&auto=format&fit=crop') no-repeat center center fixed;
+            background-size: cover;
+        }
+    </style>
+</head>
+<body class="h-screen w-screen overflow-hidden font-sans select-none text-white relative">
+
+    <div class="w-full h-10 fixed top-0 left-0 flex justify-between items-center px-6 bg-black/10 backdrop-blur-md z-50 text-sm font-semibold">
+        <div id="current-time">09:41</div>
+        <div class="flex items-center gap-2">
+            <i class="fas fa-signal"></i>
+            <i class="fas fa-wifi"></i>
+            <i class="fas fa-battery-full text-lg"></i>
+        </div>
+    </div>
+
+    <div class="pt-16 px-6 grid grid-cols-4 gap-6 justify-items-center max-w-md mx-auto">
+        <div onclick="openApp('app-about')" class="flex flex-col items-center cursor-pointer group">
+            <div class="w-16 h-16 bg-blue-500 rounded-2xl flex items-center justify-center text-3xl shadow-lg group-hover:scale-105 transition-transform">
+                <i class="fas fa-user"></i>
+            </div>
+            <span class="text-xs mt-2 drop-shadow-md">Tentang</span>
+        </div>
+
+        <div onclick="openApp('app-video')" class="flex flex-col items-center cursor-pointer group">
+            <div class="w-16 h-16 bg-purple-600 rounded-2xl flex items-center justify-center text-3xl shadow-lg group-hover:scale-105 transition-transform">
+                <i class="fas fa-video"></i>
+            </div>
+            <span class="text-xs mt-2 drop-shadow-md">Video</span>
+        </div>
+    </div>
+
+    <div id="app-about" class="hidden fixed inset-x-4 top-20 bottom-24 bg-zinc-900/95 backdrop-blur-2xl rounded-3xl shadow-2xl z-40 flex flex-col overflow-hidden max-w-lg mx-auto border border-zinc-800">
+        <div class="p-4 bg-zinc-800 flex justify-between items-center border-b border-zinc-700">
+            <span class="font-bold">Tentang Saya</span>
+            <button onclick="closeApp('app-about')" class="text-red-500 font-bold hover:text-red-400">Tutup</button>
+        </div>
+        <div class="p-6 overflow-y-auto flex-1 text-zinc-300">
+            <h2 class="text-2xl font-bold text-white mb-2">iOS Simulator Portfolio</h2>
+            <p>Aplikasi ini sekarang mendukung fitur unggah dan pemutaran video secara real-time.</p>
+        </div>
+    </div>
+
+    <div id="app-video" class="hidden fixed inset-x-4 top-20 bottom-24 bg-zinc-950/95 backdrop-blur-2xl rounded-3xl shadow-2xl z-40 flex flex-col overflow-hidden max-w-lg mx-auto border border-zinc-800">
+        <div class="p-4 bg-zinc-900 flex justify-between items-center border-b border-zinc-800">
+            <span class="font-bold text-purple-400"><i class="fas fa-play-circle mr-2"></i>iVideo Player</span>
+            <button onclick="closeApp('app-video')" class="text-red-500 font-bold hover:text-red-400">Tutup</button>
+        </div>
+        
+        <div class="p-6 flex flex-col items-center justify-center flex-1 overflow-y-auto gap-4">
+            
+            <div class="w-full aspect-video bg-black rounded-2xl overflow-hidden shadow-inner flex items-center justify-center border border-zinc-800 relative">
+                <video id="video-renderer" class="w-full h-full object-contain hidden" controls></video>
+                
+                <div id="video-placeholder" class="text-center p-4">
+                    <i class="fas fa-clapperboard text-5xl text-zinc-600 mb-2 animate-pulse"></i>
+                    <p class="text-sm text-zinc-500">Belum ada video yang dimuat</p>
+                </div>
+            </div>
+
+            <div class="w-full max-w-xs">
+                <label for="video-input" class="w-full flex items-center justify-center gap-2 bg-purple-600 hover:bg-purple-700 active:scale-95 transition-all text-white font-medium py-3 px-4 rounded-xl cursor-pointer shadow-lg text-center">
+                    <i class="fas fa-cloud-upload-alt"></i> Pilih & Putar Video
+                </label>
+                <input type="file" id="video-input" accept="video/*" class="hidden">
+            </div>
+            
+            <p class="text-xs text-zinc-500 text-center">Mendukung format MP4, WebM, atau MOV langsung dari galeri perangkat Anda.</p>
+        </div>
+    </div>
+
+    <div class="fixed bottom-6 inset-x-4 max-w-xs mx-auto h-20 bg-white/10 backdrop-blur-2xl border border-white/10 rounded-3xl flex items-center justify-around px-4 shadow-xl z-30">
+        <div class="w-12 h-12 bg-green-500 rounded-xl flex items-center justify-center text-xl shadow-md"><i class="fas fa-phone"></i></div>
+        <div class="w-12 h-12 bg-white rounded-xl flex items-center justify-center text-xl text-zinc-800 shadow-md"><i class="fas fa-envelope"></i></div>
+        <div class="w-12 h-12 bg-gradient-to-tr from-blue-400 to-blue-600 rounded-xl flex items-center justify-center text-xl shadow-md"><i class="fas fa-compass"></i></div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
