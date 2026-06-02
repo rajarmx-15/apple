@@ -3,18 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>iOS Web Simulator - Video Edition</title>
+    <title>iOS Web Simulator - Apple Music Edition</title>
+    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <!-- Font Awesome untuk Icon -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         body {
             background: url('https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1964&auto=format&fit=crop') no-repeat center center fixed;
             background-size: cover;
         }
+        /* Efek berputar untuk Album Art saat musik menyala */
+        .rotating {
+            animation: spin 12s linear infinite;
+        }
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
     </style>
 </head>
 <body class="h-screen w-screen overflow-hidden font-sans select-none text-white relative">
 
+    <!-- STATUS BAR -->
     <div class="w-full h-10 fixed top-0 left-0 flex justify-between items-center px-6 bg-black/10 backdrop-blur-md z-50 text-sm font-semibold">
         <div id="current-time">09:41</div>
         <div class="flex items-center gap-2">
@@ -24,7 +35,9 @@
         </div>
     </div>
 
+    <!-- HOMESCREEN (Grid Aplikasi) -->
     <div class="pt-16 px-6 grid grid-cols-4 gap-6 justify-items-center max-w-md mx-auto">
+        <!-- App 1: Tentang Saya -->
         <div onclick="openApp('app-about')" class="flex flex-col items-center cursor-pointer group">
             <div class="w-16 h-16 bg-blue-500 rounded-2xl flex items-center justify-center text-3xl shadow-lg group-hover:scale-105 transition-transform">
                 <i class="fas fa-user"></i>
@@ -32,14 +45,25 @@
             <span class="text-xs mt-2 drop-shadow-md">Tentang</span>
         </div>
 
+        <!-- App 2: Video Player -->
         <div onclick="openApp('app-video')" class="flex flex-col items-center cursor-pointer group">
             <div class="w-16 h-16 bg-purple-600 rounded-2xl flex items-center justify-center text-3xl shadow-lg group-hover:scale-105 transition-transform">
                 <i class="fas fa-video"></i>
             </div>
             <span class="text-xs mt-2 drop-shadow-md">Video</span>
         </div>
+
+        <!-- App 3: Apple Music (FITUR BARU) -->
+        <div onclick="openApp('app-music')" class="flex flex-col items-center cursor-pointer group">
+            <!-- Background gradasi khas Apple Music -->
+            <div class="w-16 h-16 bg-gradient-to-br from-pink-500 via-red-500 to-purple-600 rounded-2xl flex items-center justify-center text-3xl shadow-lg group-hover:scale-105 transition-transform">
+                <i class="fas fa-music text-white"></i>
+            </div>
+            <span class="text-xs mt-2 drop-shadow-md">Music</span>
+        </div>
     </div>
 
+    <!-- [WINDOW: TENTANG SAYA - Tetap Sama] -->
     <div id="app-about" class="hidden fixed inset-x-4 top-20 bottom-24 bg-zinc-900/95 backdrop-blur-2xl rounded-3xl shadow-2xl z-40 flex flex-col overflow-hidden max-w-lg mx-auto border border-zinc-800">
         <div class="p-4 bg-zinc-800 flex justify-between items-center border-b border-zinc-700">
             <span class="font-bold">Tentang Saya</span>
@@ -47,43 +71,98 @@
         </div>
         <div class="p-6 overflow-y-auto flex-1 text-zinc-300">
             <h2 class="text-2xl font-bold text-white mb-2">iOS Simulator Portfolio</h2>
-            <p>Aplikasi ini sekarang mendukung fitur unggah dan pemutaran video secara real-time.</p>
+            <p>Sudah mendukung Video Player dan Apple Music terintegrasi.</p>
         </div>
     </div>
 
+    <!-- [WINDOW: VIDEO PLAYER - Tetap Sama] -->
     <div id="app-video" class="hidden fixed inset-x-4 top-20 bottom-24 bg-zinc-950/95 backdrop-blur-2xl rounded-3xl shadow-2xl z-40 flex flex-col overflow-hidden max-w-lg mx-auto border border-zinc-800">
         <div class="p-4 bg-zinc-900 flex justify-between items-center border-b border-zinc-800">
             <span class="font-bold text-purple-400"><i class="fas fa-play-circle mr-2"></i>iVideo Player</span>
             <button onclick="closeApp('app-video')" class="text-red-500 font-bold hover:text-red-400">Tutup</button>
         </div>
-        
-        <div class="p-6 flex flex-col items-center justify-center flex-1 overflow-y-auto gap-4">
-            
+        <div class="p-6 flex flex-col items-center justify-center flex-1 gap-4">
             <div class="w-full aspect-video bg-black rounded-2xl overflow-hidden shadow-inner flex items-center justify-center border border-zinc-800 relative">
                 <video id="video-renderer" class="w-full h-full object-contain hidden" controls></video>
-                
                 <div id="video-placeholder" class="text-center p-4">
-                    <i class="fas fa-clapperboard text-5xl text-zinc-600 mb-2 animate-pulse"></i>
-                    <p class="text-sm text-zinc-500">Belum ada video yang dimuat</p>
+                    <i class="fas fa-clapperboard text-5xl text-zinc-600 mb-2"></i>
+                    <p class="text-sm text-zinc-500">Belum ada video dimuat</p>
                 </div>
             </div>
-
             <div class="w-full max-w-xs">
-                <label for="video-input" class="w-full flex items-center justify-center gap-2 bg-purple-600 hover:bg-purple-700 active:scale-95 transition-all text-white font-medium py-3 px-4 rounded-xl cursor-pointer shadow-lg text-center">
+                <label for="video-input" class="w-full flex items-center justify-center gap-2 bg-purple-600 hover:bg-purple-700 text-white font-medium py-3 px-4 rounded-xl cursor-pointer shadow-lg text-center">
                     <i class="fas fa-cloud-upload-alt"></i> Pilih & Putar Video
                 </label>
                 <input type="file" id="video-input" accept="video/*" class="hidden">
             </div>
-            
-            <p class="text-xs text-zinc-500 text-center">Mendukung format MP4, WebM, atau MOV langsung dari galeri perangkat Anda.</p>
         </div>
     </div>
 
+    <!-- JENDELA APLIKASI: APPLE MUSIC (FITUR BARU) -->
+    <div id="app-music" class="hidden fixed inset-x-4 top-20 bottom-24 bg-gradient-to-b from-zinc-900 to-black rounded-3xl shadow-2xl z-40 flex flex-col overflow-hidden max-w-lg mx-auto border border-zinc-800">
+        <!-- Header -->
+        <div class="p-4 flex justify-between items-center border-b border-zinc-800/50 bg-zinc-900/50 backdrop-blur-md">
+            <span class="font-bold text-pink-500 flex items-center gap-2">
+                <i class="fab fa-apple text-xl"></i> Music
+            </span>
+            <button onclick="closeApp('app-music')" class="text-zinc-400 font-semibold hover:text-white">Sembunyikan</button>
+        </div>
+
+        <!-- Konten Pemutar Musik ala iOS -->
+        <div class="flex-1 flex flex-col items-center justify-center p-6 gap-6">
+            <!-- Cover Album / Piringan Hitam -->
+            <div class="relative w-48 h-48 sm:w-56 sm:h-56 flex items-center justify-center">
+                <img id="music-cover" src="https://images.unsplash.com/photo-1614613535308-eb5fbd3d2c17?q=80&w=500&auto=format&fit=crop" 
+                     class="w-full h-full object-cover rounded-2xl shadow-2xl border-4 border-zinc-800 transition-transform duration-500" alt="Album Art">
+                <!-- Dot Tengah ala Vinyl -->
+                <div class="absolute w-6 h-6 bg-zinc-900 rounded-full border-4 border-black hidden" id="vinyl-center"></div>
+            </div>
+
+            <!-- Metadata Lagu -->
+            <div class="text-center">
+                <h3 id="music-title" class="text-xl font-bold tracking-tight">Pilih Lagu di Bawah</h3>
+                <p id="music-artist" class="text-sm text-zinc-400 mt-1">Apple Music Simulator</p>
+            </div>
+
+            <!-- Progress Bar -->
+            <div class="w-full max-w-xs flex flex-col gap-1">
+                <input type="range" id="music-progress" value="0" min="0" max="100" class="w-full h-1 bg-zinc-700 rounded-lg appearance-none cursor-pointer accent-pink-500">
+                <div class="flex justify-between text-xs text-zinc-500 px-1">
+                    <span id="time-current">0:00</span>
+                    <span id="time-duration">0:00</span>
+                </div>
+            </div>
+
+            <!-- Kontrol Navigasi Musik -->
+            <div class="flex items-center gap-8 text-2xl">
+                <button onclick="prevSong()" class="text-zinc-400 hover:text-white active:scale-90 transition-transform"><i class="fas fa-backward"></i></button>
+                <button onclick="togglePlay()" id="btn-play" class="w-16 h-16 bg-white text-black rounded-full flex items-center justify-center text-xl shadow-lg active:scale-95 transition-transform">
+                    <i class="fas fa-play pl-1" id="icon-play"></i>
+                </button>
+                <button onclick="nextSong()" class="text-zinc-400 hover:text-white active:scale-90 transition-transform"><i class="fas fa-forward"></i></button>
+            </div>
+
+            <!-- Mini Playlist di Dalam Aplikasi -->
+            <div class="w-full max-w-xs bg-zinc-900/60 rounded-2xl p-2 border border-zinc-800/40 text-sm overflow-y-auto max-h-32 mt-2">
+                <div onclick="playSelectSong(0)" class="p-2 hover:bg-zinc-800 rounded-xl cursor-pointer flex justify-between items-center text-xs">
+                    <span>🎵 Chill Lo-Fi Vibe</span><span class="text-zinc-500">Sample 1</span>
+                </div>
+                <div onclick="playSelectSong(1)" class="p-2 hover:bg-zinc-800 rounded-xl cursor-pointer flex justify-between items-center text-xs">
+                    <span>🎸 Energetic Rock Beats</span><span class="text-zinc-500">Sample 2</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- DOCK BAR (Bagian Bawah) -->
     <div class="fixed bottom-6 inset-x-4 max-w-xs mx-auto h-20 bg-white/10 backdrop-blur-2xl border border-white/10 rounded-3xl flex items-center justify-around px-4 shadow-xl z-30">
         <div class="w-12 h-12 bg-green-500 rounded-xl flex items-center justify-center text-xl shadow-md"><i class="fas fa-phone"></i></div>
         <div class="w-12 h-12 bg-white rounded-xl flex items-center justify-center text-xl text-zinc-800 shadow-md"><i class="fas fa-envelope"></i></div>
-        <div class="w-12 h-12 bg-gradient-to-tr from-blue-400 to-blue-600 rounded-xl flex items-center justify-center text-xl shadow-md"><i class="fas fa-compass"></i></div>
+        <div onclick="openApp('app-music')" class="w-12 h-12 bg-gradient-to-tr from-pink-500 to-red-500 rounded-xl flex items-center justify-center text-xl shadow-md cursor-pointer"><i class="fas fa-music"></i></div>
     </div>
+
+    <!-- Audio Element Hidden (Mesin utama pemutar suara) -->
+    <audio id="audio-player"></audio>
 
     <script src="script.js"></script>
 </body>
