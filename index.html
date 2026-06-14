@@ -1,20 +1,25 @@
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <!-- Cross-Origin Isolation Service Worker to enable SharedArrayBuffer natively -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/coi-serviceworker/0.1.7/coi-serviceworker.min.js"></script>
+    <!-- Cross-Origin Isolation Service Worker (skip in Capacitor native app) -->
+    <script>
+      if (!window.Capacitor) {
+        var s = document.createElement('script');
+        s.src = 'https://cdnjs.cloudflare.com/ajax/libs/coi-serviceworker/0.1.7/coi-serviceworker.min.js';
+        document.head.appendChild(s);
+      }
+    </script>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>raJa Music Player</title>
-    <!-- Google Fonts Inter wght@800 -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@800&display=swap" rel="stylesheet">
+    <title>raja Player</title>
+    <!-- Google Fonts Inter - all weights used by canvas renderer -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <!-- FontAwesome for Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
     <!-- jsmediatags CDN to parse audio files metadata -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jsmediatags/3.9.5/jsmediatags.min.js" crossorigin="anonymous"></script>
-    <!-- FFmpeg.wasm for client-side MP4 conversion -->
-    <script src="https://unpkg.com/@ffmpeg/ffmpeg@0.11.0/dist/ffmpeg.min.js" crossorigin="anonymous"></script>
-    <script type="module" crossorigin src="https://iphonemp.vercel.app/assets/index-_Ty6EkBv.js"></script>
+    <script type="module" crossorigin src="/assets/index.js"></script>
     <link rel="stylesheet" crossorigin href="/assets/styles.css">
   </head>
   <body>
